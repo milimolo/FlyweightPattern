@@ -34,24 +34,12 @@ public class MainController implements Initializable
     
     Canvas canvas;
     GraphicsContext gc;
-    
     @FXML
+    private Button button1;
+    
     private void handleButtonAction(ActionEvent event)
     {
         System.out.println("You clicked me!");
-        Random rand = new Random();
-        
-        long start = System.nanoTime();
-        for (int i = 0; i < 1000; i++)
-        {
-            int size = getRandomSize(rand);
-            Image image = new Image("hidethepainharold.jpg", size, size, true, true); // slow
-            gc.drawImage(image, rand.nextInt((int) canvas.getWidth()), rand.nextInt((int) canvas.getHeight()));
-            
-        }
-        long end = System.nanoTime();
-        
-        System.out.println("time: " + (end-start)/1_000_000 + "ms");
         
     }
     
@@ -67,5 +55,38 @@ public class MainController implements Initializable
         mainPane.getChildren().add(canvas);
         gc = canvas.getGraphicsContext2D();
     }    
+
+    @FXML
+    private void withFlyClick(ActionEvent event)
+    {
+        Random rand = new Random();
+        long start = System.nanoTime();
+        HaroldFactory fact = new HaroldFactory("hidethepainharold.jpg");
+        for (int i = 0; i < 1000; i++)
+        {
+            int size = getRandomSize(rand);
+            Harod h = fact.create(size);
+            gc.drawImage(h.getImg(), rand.nextInt((int) canvas.getWidth()), rand.nextInt((int) canvas.getHeight()));
+            
+        }
+        long end = System.nanoTime();
+        System.out.println("time: " + (end-start)/1_000_000 + "ms");
+    }
+
+    @FXML
+    private void noFlyClick(ActionEvent event)
+    {
+        Random rand = new Random();
+        long start = System.nanoTime();
+        for (int i = 0; i < 1000; i++)
+        {
+            int size = getRandomSize(rand);
+            Image image = new Image("hidethepainharold.jpg", size, size, true, true); // slow
+            gc.drawImage(image, rand.nextInt((int) canvas.getWidth()), rand.nextInt((int) canvas.getHeight()));
+            
+        }
+        long end = System.nanoTime();
+        System.out.println("time: " + (end-start)/1_000_000 + "ms");
+    }
     
 }
